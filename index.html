@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>たっきゅーぶ。</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>たっきゅーぶ。</h1>
+    </header>
+
+    <section id="schedule">
+        <h2>部活の予定表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>曜日</th>
+                    <th>時間</th>
+                    <th>部活の有無</th>
+                    <th>その他</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 7月1日から7月31日までの予定 -->
+                <script>
+                    const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
+                    const today = new Date();
+                    for (let i = 1; i <= 31; i++) {
+                        let date = new Date(2024, 6, i); // 2024年7月の日付を生成
+                        let day = days[date.getDay()];
+                        let activity = '';
+                        let other = '';
+                        if (day === '水曜日' || day === '日曜日') {
+                            activity = 'なし';
+                            other = '休養日';
+                        } else if (day === '金曜日') {
+                            activity = 'あり';
+                            other = '外練';
+                        } else {
+                            activity = 'あり';
+                            other = '通常練習';
+                        }
+                        document.write('<tr' + (date.getDate() === today.getDate() ? ' class="today"' : '') + '>');
+                        document.write('<td>' + '7月' + i + '日' + '</td>');
+                        document.write('<td>' + day + '</td>');
+                        document.write('<td>' + (activity === 'あり' ? '17:00 - 19:00' : '休み') + '</td>');
+                        document.write('<td class="' + (activity === 'あり' ? 'active' : 'inactive') + '">' + activity + '</td>');
+                        document.write('<td>' + other + '</td>');
+                        document.write('</tr>');
+                    }
+                </script>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="practice-menu">
+        <h2>練習メニュー</h2>
+        <div class="menu-item">
+            <h3>◆ フォア ◆ 10min 1set ＆ ◆ バック ◆ 10min 1set</h3>
+            <ol>
+                <li>前陣で50本連続</li>
+                <li>後陣で50本連続</li>
+                <li>左右に打ち分ける</li>
+            </ol>
+        </div>
+        <div class="menu-item">
+            <h3>◆ ツッツキ：フォア ◆ 10min 1set ＆ ◆ ツッツキ：バック ◆ 10min 1set</h3>
+            <ol>
+                <li>クロスで50本連続</li>
+                <li>ストレートで50本連続</li>
+                <li>左右に打ち分ける</li>
+            </ol>
+        </div>
+        <div class="menu-item">
+            <h3>◆ 休憩 ◆ 5min</h3>
+        </div>
+        <div class="menu-item">
+            <h3>◆ スマッシュ ◆ 10min 1set ＆ ◆ 交代 ◆ 10min 1set</h3>
+            <ol>
+                <li>ストレートで連続</li>
+                <li>フォア・バック側</li>
+                <li>左右に打ち分ける</li>
+            </ol>
+        </div>
+        <div class="menu-item">
+            <h3>◆ ブロック ◆ 10min 1set ＆ ◆ 交代 ◆ 10min 1set</h3>
+            <ol>
+                <li>スマッシュを連続でブロック</li>
+                <li>ドライブを連続でブロック</li>
+            </ol>
+        </div>
+    </section>
+
+    <section id="tournament-schedule">
+        <h2>大会日程</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>時間</th>
+                    <th>大会名</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7月15日</td>
+                    <td>10:00 - 15:00</td>
+                    <td>夏季大会</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <p>© 2024 たっきゅーぶ。</p>
+    </footer>
+</body>
+</html>
