@@ -10,8 +10,15 @@
     <header>
         <h1>たっきゅーぶ。</h1>
     </header>
+    <section id="schedule">
+      <div id="today-info" class="info-block">
+          <!-- 今日の情報がここに挿入されます -->
+      </div>
+</section>
 
     <section id="schedule">
+
+
         <h2>部活の予定表</h2>
         <table>
             <thead>
@@ -23,35 +30,8 @@
                     <th>その他</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- 7月1日から7月31日までの予定 -->
-                <script>
-                    const days = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
-                    const today = new Date();
-                    for (let i = 1; i <= 31; i++) {
-                        let date = new Date(2024, 6, i); // 2024年7月の日付を生成
-                        let day = days[date.getDay()];
-                        let activity = '';
-                        let other = '';
-                        if (day === '水曜日' || day === '日曜日') {
-                            activity = 'なし';
-                            other = '休養日';
-                        } else if (day === '金曜日') {
-                            activity = 'あり';
-                            other = '外練';
-                        } else {
-                            activity = 'あり';
-                            other = '通常練習';
-                        }
-                        document.write('<tr' + (date.getDate() === today.getDate() ? ' class="today"' : '') + '>');
-                        document.write('<td>' + '7月' + i + '日' + '</td>');
-                        document.write('<td>' + day + '</td>');
-                        document.write('<td>' + (activity === 'あり' ? '17:00 - 19:00' : '休み') + '</td>');
-                        document.write('<td class="' + (activity === 'あり' ? 'active' : 'inactive') + '">' + activity + '</td>');
-                        document.write('<td>' + other + '</td>');
-                        document.write('</tr>');
-                    }
-                </script>
+            <tbody id="schedule-body">
+                <!-- データがここに挿入されます -->
             </tbody>
         </table>
     </section>
@@ -106,16 +86,75 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>7月15日</td>
-                    <td>10:00 - 15:00</td>
-                    <td>夏季大会</td>
+                    <td>-月-日</td>
+                    <td>--:-- - --:--</td>
+                    <td>〇〇大会</td>
                 </tr>
             </tbody>
         </table>
     </section>
-
+    <section id="tournament-schedule">
+    </section>
     <footer>
-        <p>© 2024 たっきゅーぶ。</p>
+        <p>© 2024 か～びぃ？/ kabii</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('data.csv')
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n');
+                    let tableBody = '';
+                    let todayInfo = '';
+                    let todayClass = '';
+                    const today = new Date();
+                    const todayDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+                    rows.forEach((row, index) => {
+                        if (index > 0) { // Skip the header row
+                            const columns = row.split(',');
+                            const date = columns[0];
+                            const dayOfWeek = columns[1];
+                            const time = columns[2];
+                            const activity = columns[3];
+                            const other = columns[4];
+
+                            const formattedDate = `${date.split('-')[1]}月${date.split('-')[2]}日`;
+
+                            if (date === todayDate) {
+                                todayInfo = `
+                                    <div class="info-block ${activity === 'あり' ? 'active' : 'inactive'}">
+                                        <h1>${formattedDate}</h1>
+                                        <h2>${time}</h2>
+                                        <p><b>${activity === 'あり' ? '今日の部活は ' + time + ' です。' : '今日の部活はありません'}</p>
+                                    </div>
+                                `;
+                                todayClass = activity === 'あり' ? 'active' : 'inactive';
+                            }
+
+                            let rowClass = '';
+                            if (activity === 'あり') {
+                                rowClass = 'active';
+                            } else if (activity === 'なし') {
+                                rowClass = 'inactive';
+                            }
+
+                            tableBody += `<tr class="${date === todayDate ? 'today' : rowClass}">
+                                <td>${formattedDate}</td>
+                                <td>${dayOfWeek}</td>
+                                <td>${time}</td>
+                                <td>${activity}</td>
+                                <td>${other}</td>
+                            </tr>`;
+                        }
+                    });
+
+                    document.getElementById('schedule-body').innerHTML = tableBody;
+                    document.getElementById('today-info').innerHTML = todayInfo;
+                })
+                .catch(error => console.error('Error loading CSV:', error));
+        });
+    </script>
 </body>
 </html>
